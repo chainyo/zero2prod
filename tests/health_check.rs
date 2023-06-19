@@ -1,3 +1,4 @@
+#![allow(clippy::all)]
 use std::net::TcpListener;
 
 // Launch our application in the background ~somehow~
