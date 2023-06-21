@@ -2447,7 +2447,6 @@ dependencies = [
  "actix-web",
  "chrono",
  "config",
- "openssl",
  "reqwest",
  "serde",
  "sqlx",
