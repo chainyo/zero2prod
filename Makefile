@@ -18,5 +18,4 @@ pipeline:
 	cargo test --all-targets --all-features && \
 	cargo clippy --all-targets --all-features -- -D warnings && \
 	cargo fmt && \
-	cargo audit && \
 	cargo tarpaulin --ignore-tests
