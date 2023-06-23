@@ -1,0 +1,10 @@
+.gitignore
+.github/
+.env
+.vscode/
+Dockerfile
+Makefile
+migrations/
+scripts/
+target/
+tests/
