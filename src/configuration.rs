@@ -2,9 +2,8 @@
 use secrecy::{ExposeSecret, Secret};
 use serde::Deserialize;
 use serde_aux::field_attributes::deserialize_number_from_string;
+use sqlx::postgres::{PgConnectOptions, PgSslMode};
 use sqlx::ConnectOptions;
-use sqlx::postgres::PgConnectOptions;
-use sqlx::postgres::PgSslMode;
 
 #[derive(Deserialize)]
 pub struct Settings {
@@ -39,7 +38,7 @@ impl DatabaseSettings {
         PgConnectOptions::new()
             .host(&self.host)
             .username(&self.username)
-            .password(&self.password.expose_secret())
+            .password(self.password.expose_secret())
             .port(self.port)
             .ssl_mode(ssl_mode)
     }
@@ -73,15 +72,15 @@ impl TryFrom<String> for Environment {
             "local" => Ok(Self::Local),
             "production" => Ok(Self::Production),
             other => Err(format!(
-                "{} is not supported environment. Use either `local` or `production`.", other
+                "{} is not supported environment. Use either `local` or `production`.",
+                other
             )),
         }
     }
 }
 
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {
-    let base_path = std::env::current_dir()
-        .expect("Failed to determine the current directory.");
+    let base_path = std::env::current_dir().expect("Failed to determine the current directory.");
     let configuration_directory = base_path.join("configuration");
 
     let environment: Environment = std::env::var("APP_ENVIRONMENT")
@@ -91,16 +90,16 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
     let environment_filename = format!("{}.yaml", environment.as_str());
 
     let settings = config::Config::builder()
-        .add_source(
-            config::File::from(configuration_directory.join("base.yaml"))
-        )
-        .add_source(
-            config::File::from(configuration_directory.join(environment_filename))
-        )
+        .add_source(config::File::from(
+            configuration_directory.join("base.yaml"),
+        ))
+        .add_source(config::File::from(
+            configuration_directory.join(environment_filename),
+        ))
         .add_source(
             config::Environment::with_prefix("APP")
                 .prefix_separator("_")
-                .separator("__")
+                .separator("__"),
         )
         .build()?;
     // Try to convert the configuration values it read into our Settings type
