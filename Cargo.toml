@@ -45,8 +45,14 @@ features = [
     "uuid",
 ]
 
+[dependencies.reqwest]
+version = "0.11"
+default-features = false
+features = ["json", "rustls-tls"]
+
 [dev-dependencies]
 fake = "~2.3.0"
 quickcheck = "0.9.2"
 quickcheck_macros = "0.9.1"
-reqwest = "0.11"
+tokio = { version = "1.28", features = ["macros", "rt"] }
+wiremock = "0.5"
